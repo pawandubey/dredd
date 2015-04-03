@@ -15,7 +15,7 @@
  */
 package com.pawandubey.dredd;
 
-import com.pawandubey.dredd.model.ConnectionManager;
+import com.pawandubey.dredd.model.ConnectionProvider;
 
 /**
  *
@@ -35,7 +35,7 @@ public class Dredd {
      * @throws java.lang.ClassNotFoundException
      */
     public static void main(String[] args) throws ClassNotFoundException {
-        ConnectionManager.connect(DB_USERNAME, DB_PASSWORD, DBMS, DB_SERVER, DB_PORT, DB_NAME);
+        ConnectionProvider.connect(DB_USERNAME, DB_PASSWORD, DBMS, DB_SERVER, DB_PORT, DB_NAME);
 
     }
 

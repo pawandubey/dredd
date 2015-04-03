@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  *
  * @author Pawan Dubey pawandubey@outlook.com
  */
-public class ConnectionManager {
+public class ConnectionProvider {
 
     /**
      * Static method to get a connection to the database.
