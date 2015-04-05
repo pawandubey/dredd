@@ -16,6 +16,7 @@
 package com.pawandubey.dredd.model;
 
 /**
+ * Represents a question
  *
  * @author Pawan Dubey pawandubey@outlook.com
  */
@@ -97,10 +98,16 @@ public class Question {
         return dateAdded;
     }
 
+    /**
+     * Increments the total submissions for the particular question
+     */
     public void incrementTotalSubmissions() {
         this.totalSubmissions++;
     }
 
+    /**
+     * Increments the number of correct submissions for the particular question
+     */
     public void incrementCorrectSubmissions() {
         this.correctSubmissions++;
     }

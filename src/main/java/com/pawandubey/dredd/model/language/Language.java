@@ -22,7 +22,13 @@ package com.pawandubey.dredd.model.language;
  */
 public interface Language {
 
+    /**
+     * Defines an interface for the compilation process
+     */
     public void compile();
 
+    /**
+     * Defines an interface for the execution of the compiled code
+     */
     public void execute();
 }

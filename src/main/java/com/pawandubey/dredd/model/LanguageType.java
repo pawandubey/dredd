@@ -21,7 +21,18 @@ package com.pawandubey.dredd.model;
  */
 public enum LanguageType {
 
-    JAVA("Java"), CPP("C++"), C("C");
+    /**
+     * Java language
+     */
+    JAVA("Java"),
+    /**
+     * C++ language
+     */
+    CPP("C++"),
+    /**
+     * C language
+     */
+    C("C");
 
     private final String name;
 
