@@ -16,6 +16,9 @@
 package com.pawandubey.dredd;
 
 import com.pawandubey.dredd.model.ConnectionProvider;
+import com.pawandubey.dredd.model.language.JavaLanguage;
+import com.pawandubey.dredd.model.language.Language;
+import java.nio.file.Paths;
 
 /**
  *
@@ -36,7 +39,9 @@ public class Dredd {
      */
     public static void main(String[] args) throws ClassNotFoundException {
         ConnectionProvider.connect(DB_USERNAME, DB_PASSWORD, DBMS, DB_SERVER, DB_PORT, DB_NAME);
-
+        Language language = new JavaLanguage(Paths.get("/home/pawandubey/dredd/tada.java"), "one", 0, "1234");
+        language.compile();
+        language.execute();
     }
 
 }

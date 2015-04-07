@@ -22,6 +22,7 @@ package com.pawandubey.dredd.model.language;
  */
 public interface Language {
 
+    public static final String BASE_DIR = System.getProperty("user.home") + "/dredd";
     /**
      * Defines an interface for the compilation process
      */
