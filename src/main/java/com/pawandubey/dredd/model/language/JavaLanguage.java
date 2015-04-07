@@ -78,8 +78,10 @@ public class JavaLanguage implements Language {
             ProcessBuilder pb = new ProcessBuilder(stagingDir.toString() + PATH_SEPARATOR + "execute.sh");
             File oFile = new File(stagingDir.toString() + PATH_SEPARATOR + "output.txt");
             File errFile = new File(stagingDir.toString() + PATH_SEPARATOR + "error.txt");
+            File inFile = new File(stagingDir.toString() + PATH_SEPARATOR + "assets/testcase.txt");
             pb.redirectOutput(oFile);
             pb.redirectError(errFile);
+            pb.redirectInput(inFile);
             Process p = pb.start();
             p.waitFor();
             System.out.println("Execution completed");
