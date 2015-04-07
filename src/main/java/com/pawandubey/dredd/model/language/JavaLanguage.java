@@ -30,11 +30,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Defines the interface for the Java Programming Language
  * @author Pawan Dubey pawandubey@outlook.com
  */
 public class JavaLanguage implements Language {
-
+    
+    private final String LANGUAGE_NAME = "Java";
     private final String PATH_SEPARATOR = System.getProperty("file.separator");
     private final String stagingPath = BASE_DIR + PATH_SEPARATOR + "questions";
     private final Path file;
@@ -51,6 +52,11 @@ public class JavaLanguage implements Language {
         this.name = file.getFileName().toString().substring(0, file.getFileName().toString().lastIndexOf("."));
     }
 
+    @Override
+    public String getName(){
+        return this.LANGUAGE_NAME;
+    }
+    
     @Override
     public void compile() {
         try {

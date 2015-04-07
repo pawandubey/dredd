@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Pawan Dubey pawandubey@outlook.com.
+ * Copyright 2015 shubheksha.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,28 @@
  */
 package com.pawandubey.dredd.model;
 
+import com.pawandubey.dredd.model.language.Language;
+
 /**
  *
- * @author Pawan Dubey pawandubey@outlook.com
+ * @author shubheksha
  */
-public enum LanguageType {
-
-    /**
-     * Java language
-     */
-    JAVA("Java"),
-    /**
-     * C++ language
-     */
-    CPP("C++"),
-    /**
-     * C language
-     */
-    C("C");
-
-    public final String name;
-
-    LanguageType(String name) {
-        this.name = name;
+public class Judge {
+    private final Language language;
+    private final String fileExtension;
+    
+    Judge(Language lang){
+        this.language = lang;        
+        if(this.language.getName().equals(LanguageType.JAVA.name)){
+            this.fileExtension = "java";
+        }
+        else if(this.language.getName().equals(LanguageType.CPP.name)){
+            this.fileExtension = "cpp";
+        }
+        else{
+            this.fileExtension = "c";
+        }
     }
+    
+    
 }
