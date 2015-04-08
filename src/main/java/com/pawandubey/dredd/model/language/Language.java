@@ -32,4 +32,6 @@ public interface Language {
      * Defines an interface for the execution of the compiled code
      */
     public void execute();
+
+    public Object getName();
 }
