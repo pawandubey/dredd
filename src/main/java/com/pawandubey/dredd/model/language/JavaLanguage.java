@@ -32,15 +32,14 @@ public class JavaLanguage implements Language {
     private final String PATH_SEPARATOR = System.getProperty("file.separator");
     private final String stagingPath = BASE_DIR + PATH_SEPARATOR + "questions";
     private final Path file;
-    private final String executionDirectory;
-    private final String name;
+    private final String executionDirectory;    
     private final String compileScript = "javac ";
     private final String executeScript = "java ";
 
     public JavaLanguage(Path f, String dir) {
         this.file = f;
         this.executionDirectory = dir;
-        this.name = file.getFileName().toString().substring(0, file.getFileName().toString().lastIndexOf("."));
+        
     }
 
     @Override

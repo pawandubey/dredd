@@ -41,16 +41,17 @@ public class Judge {
     private final String stagingPath = BASE_DIR + PATH_SEPARATOR + "questions";
     private final String executionDirectory;
     private final String submissionID;
-    private final String name;    
+    private final String name;
+    private final String fileName;
     private final Integer timeout;
 
-    Judge(Language lang, String sPath, String ePath, String sID, Integer time) {
+    public Judge(Language lang, String ePath, String sID, Integer time) {
         this.language = lang;
         this.executionDirectory = ePath;
         this.submissionID = sID;
         this.name = lang.getName();
         this.timeout = time;
-
+        this.fileName = language.getFile().getFileName().toString().substring(0, language.getFile().getFileName().toString().lastIndexOf("."));
         if (this.name.equals(LanguageType.JAVA.name)) {
             this.FILE_EXTENSION = ".java";
         }
@@ -67,6 +68,8 @@ public class Judge {
             createStagingArea(language);
             makeScriptsExecutable();
             language.compile();
+            language.execute();
+            //cleanStagingArea();
 
         }
         catch (IOException | InterruptedException ex) {
@@ -78,19 +81,19 @@ public class Judge {
         Path stagingDir = Paths.get(this.stagingPath, this.executionDirectory);
         Path testFile = Paths.get(stagingDir.toString());
         Files.createDirectories(testFile);
-        String subFile = this.name + FILE_EXTENSION;
+        String subFile = this.fileName + FILE_EXTENSION;
         Files.copy(language.getFile(), Paths.get(testFile.toString(), subFile), StandardCopyOption.REPLACE_EXISTING);
         String changeDir = "cd " + stagingDir.toString();
         Path compileScript = Paths.get(testFile.toString(), "compile.sh");
         Files.createFile(compileScript);
         try (final BufferedWriter bw = Files.newBufferedWriter(compileScript, StandardOpenOption.CREATE)) {
-            String script = changeDir + "\n" + language.getCompileScript() + this.name + FILE_EXTENSION;
+            String script = changeDir + "\n" + language.getCompileScript() + fileName + FILE_EXTENSION;
             bw.write(script);
         }
         Path executeScript = Paths.get(testFile.toString(), "execute.sh");
         Files.createFile(executeScript);
         try (final BufferedWriter bw = Files.newBufferedWriter(executeScript, StandardOpenOption.CREATE)) {
-            String script = changeDir + "\n" + language.getExecuteScript() + this.name;
+            String script = changeDir + "\n" + language.getExecuteScript() + fileName;
             bw.write(script);
         }
     }
