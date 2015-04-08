@@ -16,6 +16,19 @@
 package com.pawandubey.dredd.model;
 
 import com.pawandubey.dredd.model.language.Language;
+import static com.pawandubey.dredd.model.language.Language.BASE_DIR;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,20 +36,93 @@ import com.pawandubey.dredd.model.language.Language;
  */
 public class Judge {
     private final Language language;
-    private final String fileExtension;
-    
-    Judge(Language lang){
-        this.language = lang;        
-        if(this.language.getName().equals(LanguageType.JAVA.name)){
-            this.fileExtension = "java";
+    private final String FILE_EXTENSION;
+    private final String PATH_SEPARATOR = System.getProperty("file.separator");
+    private final String stagingPath = BASE_DIR + PATH_SEPARATOR + "questions";
+    private final String executionDirectory;
+    private final String submissionID;
+    private final String name;    
+    private final Integer timeout;
+
+    Judge(Language lang, String sPath, String ePath, String sID, Integer time) {
+        this.language = lang;
+        this.executionDirectory = ePath;
+        this.submissionID = sID;
+        this.name = lang.getName();
+        this.timeout = time;
+
+        if (this.name.equals(LanguageType.JAVA.name)) {
+            this.FILE_EXTENSION = ".java";
         }
-        else if(this.language.getName().equals(LanguageType.CPP.name)){
-            this.fileExtension = "cpp";
+        else if (this.name.equals(LanguageType.CPP.name)) {
+            this.FILE_EXTENSION = ".cpp";
         }
         else{
-            this.fileExtension = "c";
+            this.FILE_EXTENSION = ".c";
         }
     }
+
+    public void evaluate() {
+        try {
+            createStagingArea(language);
+            makeScriptsExecutable();
+            language.compile();
+
+        }
+        catch (IOException | InterruptedException ex) {
+            Logger.getLogger(Judge.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void createStagingArea(Language language) throws IOException {
+        Path stagingDir = Paths.get(this.stagingPath, this.executionDirectory);
+        Path testFile = Paths.get(stagingDir.toString());
+        Files.createDirectories(testFile);
+        String subFile = this.name + FILE_EXTENSION;
+        Files.copy(language.getFile(), Paths.get(testFile.toString(), subFile), StandardCopyOption.REPLACE_EXISTING);
+        String changeDir = "cd " + stagingDir.toString();
+        Path compileScript = Paths.get(testFile.toString(), "compile.sh");
+        Files.createFile(compileScript);
+        try (final BufferedWriter bw = Files.newBufferedWriter(compileScript, StandardOpenOption.CREATE)) {
+            String script = changeDir + "\n" + language.getCompileScript() + this.name + FILE_EXTENSION;
+            bw.write(script);
+        }
+        Path executeScript = Paths.get(testFile.toString(), "execute.sh");
+        Files.createFile(executeScript);
+        try (final BufferedWriter bw = Files.newBufferedWriter(executeScript, StandardOpenOption.CREATE)) {
+            String script = changeDir + "\n" + language.getExecuteScript() + this.name;
+            bw.write(script);
+        }
+    }
+
+    private void cleanStagingArea() throws IOException {
+        Path stagingDir = Paths.get(stagingPath, executionDirectory);
+        Path testFile = Paths.get(stagingDir.toString());
+        Files.deleteIfExists(Paths.get(testFile.toString(), name + FILE_EXTENSION));
+        Files.deleteIfExists(Paths.get(testFile.toString(), name + ".class"));
+        Files.deleteIfExists(Paths.get(testFile.toString(), "a.out"));
+        Files.deleteIfExists(Paths.get(testFile.toString(), "compile.sh"));
+        Files.deleteIfExists(Paths.get(testFile.toString(), "execute.sh"));
+        Files.deleteIfExists(Paths.get(testFile.toString(), "output.txt"));
+        Files.deleteIfExists(Paths.get(testFile.toString(), "error.txt"));
+    }
+
+    private void makeScriptsExecutable() throws IOException, InterruptedException {
+        Path stagingDir = Paths.get(stagingPath, executionDirectory);
+        Set<PosixFilePermission> perms = new HashSet<>();
+        perms.add(PosixFilePermission.OWNER_READ);
+        perms.add(PosixFilePermission.OWNER_WRITE);
+        perms.add(PosixFilePermission.OWNER_EXECUTE);
+        perms.add(PosixFilePermission.GROUP_READ);
+        perms.add(PosixFilePermission.GROUP_WRITE);
+        perms.add(PosixFilePermission.GROUP_EXECUTE);
+        perms.add(PosixFilePermission.OTHERS_READ);
+        perms.add(PosixFilePermission.OTHERS_WRITE);
+        perms.add(PosixFilePermission.OTHERS_EXECUTE);
+        Files.setPosixFilePermissions(Paths.get(stagingDir + PATH_SEPARATOR + "compile.sh"), perms);
+        Files.setPosixFilePermissions(Paths.get(stagingDir + PATH_SEPARATOR + "execute.sh"), perms);
+    }
+
     
     
 }

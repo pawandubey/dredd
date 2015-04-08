@@ -15,6 +15,8 @@
  */
 package com.pawandubey.dredd.model.language;
 
+import java.nio.file.Path;
+
 /**
  * Defines an interface for a language
  *
@@ -33,5 +35,15 @@ public interface Language {
      */
     public void execute();
 
-    public Object getName();
+    /**
+     *
+     * @return the name for the language file
+     */
+    public String getName();
+
+    public Path getFile();
+
+    public String getCompileScript();
+
+    public String getExecuteScript();
 }
