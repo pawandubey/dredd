@@ -17,6 +17,7 @@ package com.pawandubey.dredd.model;
 
 import com.pawandubey.dredd.model.language.Language;
 import static com.pawandubey.dredd.model.language.Language.BASE_DIR;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -63,31 +64,54 @@ public class Judge {
         }
     }
 
-    public void evaluate() {
+    public String evaluate() {
+        String finalResult = Judgement.INCORRECT.toString();
         try {
             createStagingArea(language);
             makeScriptsExecutable();
             language.compile();
             language.execute();
-            //cleanStagingArea();
+            finalResult = check();
+            cleanStagingArea();
 
         }
         catch (IOException | InterruptedException ex) {
             Logger.getLogger(Judge.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return finalResult;
+    }
+
+    private String check() throws IOException {
+        Path outputFile = Paths.get(this.stagingPath, this.executionDirectory, "output.txt");
+        Path correctOutput = Paths.get(this.stagingPath, this.executionDirectory, "assets", "result.txt");
+        try (final BufferedReader bo = Files.newBufferedReader(outputFile);
+             final BufferedReader br = Files.newBufferedReader(correctOutput)) {
+            while (true) {
+
+                if (!(bo.readLine().equals(br.readLine()))) {
+                    return Judgement.INCORRECT.toString();
+
+                }
+                if (bo.readLine() == null && br.readLine() == null) {
+                    return Judgement.CORRECT.toString();
+
+                }
+            }            
         }
     }
 
     private void createStagingArea(Language language) throws IOException {
         Path stagingDir = Paths.get(this.stagingPath, this.executionDirectory);
         Path testFile = Paths.get(stagingDir.toString());
-        Files.createDirectories(testFile);
+        //TODO: Files.createDirectories(testFile);
         String subFile = this.fileName + FILE_EXTENSION;
         Files.copy(language.getFile(), Paths.get(testFile.toString(), subFile), StandardCopyOption.REPLACE_EXISTING);
         String changeDir = "cd " + stagingDir.toString();
         Path compileScript = Paths.get(testFile.toString(), "compile.sh");
         Files.createFile(compileScript);
         try (final BufferedWriter bw = Files.newBufferedWriter(compileScript, StandardOpenOption.CREATE)) {
-            String script = changeDir + "\n" + language.getCompileScript() + fileName + FILE_EXTENSION;
+            String isNotJava = this.language.getName().equals("Java") ? "" : this.fileName + " ";
+            String script = changeDir + "\n" + language.getCompileScript() + isNotJava + fileName + FILE_EXTENSION;
             bw.write(script);
         }
         Path executeScript = Paths.get(testFile.toString(), "execute.sh");
@@ -101,9 +125,9 @@ public class Judge {
     private void cleanStagingArea() throws IOException {
         Path stagingDir = Paths.get(stagingPath, executionDirectory);
         Path testFile = Paths.get(stagingDir.toString());
-        Files.deleteIfExists(Paths.get(testFile.toString(), name + FILE_EXTENSION));
-        Files.deleteIfExists(Paths.get(testFile.toString(), name + ".class"));
-        Files.deleteIfExists(Paths.get(testFile.toString(), "a.out"));
+        Files.deleteIfExists(Paths.get(testFile.toString(), fileName + FILE_EXTENSION));
+        Files.deleteIfExists(Paths.get(testFile.toString(), fileName + ".class"));
+        Files.deleteIfExists(Paths.get(testFile.toString(), fileName));
         Files.deleteIfExists(Paths.get(testFile.toString(), "compile.sh"));
         Files.deleteIfExists(Paths.get(testFile.toString(), "execute.sh"));
         Files.deleteIfExists(Paths.get(testFile.toString(), "output.txt"));
@@ -124,8 +148,6 @@ public class Judge {
         perms.add(PosixFilePermission.OTHERS_EXECUTE);
         Files.setPosixFilePermissions(Paths.get(stagingDir + PATH_SEPARATOR + "compile.sh"), perms);
         Files.setPosixFilePermissions(Paths.get(stagingDir + PATH_SEPARATOR + "execute.sh"), perms);
-    }
-
-    
+    } 
     
 }

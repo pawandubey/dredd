@@ -17,7 +17,7 @@ package com.pawandubey.dredd;
 
 import com.pawandubey.dredd.model.ConnectionProvider;
 import com.pawandubey.dredd.model.Judge;
-import com.pawandubey.dredd.model.language.JavaLanguage;
+import com.pawandubey.dredd.model.language.CLanguage;
 import com.pawandubey.dredd.model.language.Language;
 import java.nio.file.Paths;
 
@@ -40,10 +40,10 @@ public class Dredd {
      */
     public static void main(String[] args) throws ClassNotFoundException {
         ConnectionProvider.connect(DB_USERNAME, DB_PASSWORD, DBMS, DB_SERVER, DB_PORT, DB_NAME);
-        Language language = new JavaLanguage(Paths.get("/home/pawandubey/dredd/tada.java"), "one");
+        Language language = new CLanguage(Paths.get("/home/pawandubey/dredd/test.c"), "one");
 
         Judge judge = new Judge(language, "one", "1234", 0);
-        judge.evaluate();
+        System.out.println(judge.evaluate());
     }
 
 }
