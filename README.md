@@ -1,7 +1,7 @@
 # dredd  ![build status](https://travis-ci.org/pawandubey/dredd.svg?branch=master)
 A simple java code judge.
 
-#For contributors
+##For contributors
 **Follow this Git workflow if you want to contribute**
 * Fork this repository
 * Clone it locally
