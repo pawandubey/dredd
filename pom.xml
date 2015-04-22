@@ -22,10 +22,19 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.pawandubey.dredd.Dredd</mainClass>
+                            <mainClass>com.pawandubey.dredd.gui.DreddGUI</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -39,6 +48,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.35</version>
-        </dependency>
+        </dependency>        
     </dependencies>
 </project>
