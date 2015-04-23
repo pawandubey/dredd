@@ -77,6 +77,11 @@ public class DreddGUI extends javax.swing.JFrame {
         activeScreenLabel.setText("HOME");
 
         homeProfileButton.setText("Hello, Pawan");
+        homeProfileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                homeProfileButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout titlePanelLayout = new javax.swing.GroupLayout(titlePanel);
         titlePanel.setLayout(titlePanelLayout);
@@ -261,6 +266,19 @@ public class DreddGUI extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_chooseFileButtonActionPerformed
+
+    private void homeProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeProfileButtonActionPerformed
+        if(homeProfileButton.isSelected()){
+            this.homePanel.setVisible(false);
+            this.profilePanel.setVisible(true);
+            homeProfileButton.setText("Back");
+        }
+        else{
+            this.homePanel.setVisible(true);
+            this.profilePanel.setVisible(false);
+            homeProfileButton.setText("Hello, Pawan");
+        }
+    }//GEN-LAST:event_homeProfileButtonActionPerformed
 
     /**
      * @param args the command line arguments
