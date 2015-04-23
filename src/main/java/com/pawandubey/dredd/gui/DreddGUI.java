@@ -15,6 +15,9 @@
  */
 package com.pawandubey.dredd.gui;
 
+import java.io.File;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author Pawan Dubey pawandubey@outlook.com
@@ -54,7 +57,7 @@ public class DreddGUI extends javax.swing.JFrame {
         submitButton = new javax.swing.JButton();
         chooseFileButton = new javax.swing.JButton();
         profilePanel = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        scrollPane = new javax.swing.JScrollPane();
         submissionsTable = new javax.swing.JTable();
         submissionsLabel = new javax.swing.JLabel();
         totalSubmissionsLabel = new javax.swing.JLabel();
@@ -124,6 +127,11 @@ public class DreddGUI extends javax.swing.JFrame {
         submitButton.setText("Submit");
 
         chooseFileButton.setText("Choose File");
+        chooseFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chooseFileButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
         homePanel.setLayout(homePanelLayout);
@@ -182,7 +190,7 @@ public class DreddGUI extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(submissionsTable);
+        scrollPane.setViewportView(submissionsTable);
 
         submissionsLabel.setFont(new java.awt.Font("Questrial", 0, 24)); // NOI18N
         submissionsLabel.setText("Submissions");
@@ -205,7 +213,7 @@ public class DreddGUI extends javax.swing.JFrame {
                             .addComponent(totalSubmissionsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(correctSubmissionsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE))
+                    .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE))
                 .addContainerGap())
         );
         profilePanelLayout.setVerticalGroup(
@@ -219,7 +227,7 @@ public class DreddGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(correctSubmissionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -242,6 +250,17 @@ public class DreddGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void chooseFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseFileButtonActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        if(fileChooser.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
+            File submissionFile = fileChooser.getSelectedFile();
+            if(submissionFile != null){
+                chooseFileButton.setText(submissionFile.getName());
+            }
+        }
+
+    }//GEN-LAST:event_chooseFileButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -286,13 +305,13 @@ public class DreddGUI extends javax.swing.JFrame {
     private javax.swing.JToggleButton homeProfileButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JComboBox languageComboBox;
     private javax.swing.JButton logoutButton;
     private javax.swing.JPanel profilePanel;
     private javax.swing.JLabel questionNameLabel;
     private javax.swing.JTextArea questionTextArea;
     private javax.swing.JList questionsList;
+    private javax.swing.JScrollPane scrollPane;
     private javax.swing.JLabel submissionStatsLabel;
     private javax.swing.JLabel submissionsLabel;
     private javax.swing.JTable submissionsTable;
