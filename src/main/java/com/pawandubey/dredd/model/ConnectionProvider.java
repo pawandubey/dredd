@@ -15,7 +15,6 @@
  */
 package com.pawandubey.dredd.model;
 
-import com.pawandubey.dredd.Dredd;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -53,7 +52,7 @@ public class ConnectionProvider {
             }
         }
         catch (SQLException ex) {
-            Logger.getLogger(Dredd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConnectionProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dbConnection;
     }

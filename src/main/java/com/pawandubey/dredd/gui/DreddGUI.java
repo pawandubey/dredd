@@ -17,15 +17,33 @@ package com.pawandubey.dredd.gui;
 
 import com.pawandubey.dredd.model.ConnectionProvider;
 import com.pawandubey.dredd.model.Judge;
+import com.pawandubey.dredd.model.Judgement;
 import com.pawandubey.dredd.model.language.CLanguage;
+import com.pawandubey.dredd.model.language.CPPLanguage;
+import com.pawandubey.dredd.model.language.JavaLanguage;
 import com.pawandubey.dredd.model.language.Language;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -40,15 +58,21 @@ public class DreddGUI extends javax.swing.JFrame {
     private static final String DB_PORT = "3306";
     private static final String DB_NAME = "dredd";
     private static Connection con;
-    private String username;
+    private static String username;
+    private TableModel model;
+    private File file;
+    private static String userid;
 
     static boolean authenticate(String username, String password) {
         try {
             Statement st = con.createStatement();
-            String query = "Select password from users where name = '" + username + "'";
+            String query = "Select userid, password from users where name = '" + username + "'";
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                return rs.getString("password").equals(password);
+                if (rs.getString("password").equals(password)) {
+                    userid = rs.getString("userid");
+                    return true;
+                }
             }
         }
         catch (SQLException e) {
@@ -79,8 +103,6 @@ k * WARNING: Do NOT modify this code. The content of this method is
         logoutButton = new javax.swing.JButton();
         contentPanel = new javax.swing.JPanel();
         homePanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        questionsList = new javax.swing.JList();
         jScrollPane2 = new javax.swing.JScrollPane();
         questionTextArea = new javax.swing.JTextArea();
         questionNameLabel = new javax.swing.JLabel();
@@ -88,6 +110,8 @@ k * WARNING: Do NOT modify this code. The content of this method is
         languageComboBox = new javax.swing.JComboBox();
         submitButton = new javax.swing.JButton();
         chooseFileButton = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        questionsList = new javax.swing.JList();
         profilePanel = new javax.swing.JPanel();
         scrollPane = new javax.swing.JScrollPane();
         submissionsTable = new javax.swing.JTable();
@@ -159,13 +183,6 @@ k * WARNING: Do NOT modify this code. The content of this method is
 
         contentPanel.setLayout(new javax.swing.OverlayLayout(contentPanel));
 
-        questionsList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(questionsList);
-
         questionTextArea.setColumns(20);
         questionTextArea.setRows(5);
         jScrollPane2.setViewportView(questionTextArea);
@@ -173,6 +190,11 @@ k * WARNING: Do NOT modify this code. The content of this method is
         languageComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Java", "C++", "C" }));
 
         submitButton.setText("Submit");
+        submitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitButtonActionPerformed(evt);
+            }
+        });
 
         chooseFileButton.setText("Choose File");
         chooseFileButton.addActionListener(new java.awt.event.ActionListener() {
@@ -181,20 +203,27 @@ k * WARNING: Do NOT modify this code. The content of this method is
             }
         });
 
+        questionsList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane3.setViewportView(questionsList);
+
         javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
         homePanel.setLayout(homePanelLayout);
         homePanelLayout.setHorizontalGroup(
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(homePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
                     .addGroup(homePanelLayout.createSequentialGroup()
                         .addComponent(questionNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(submissionStatsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
+                        .addComponent(submissionStatsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE))
                     .addGroup(homePanelLayout.createSequentialGroup()
                         .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(submitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -209,7 +238,7 @@ k * WARNING: Do NOT modify this code. The content of this method is
             .addGroup(homePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane3)
                     .addGroup(homePanelLayout.createSequentialGroup()
                         .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(questionNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -221,23 +250,13 @@ k * WARNING: Do NOT modify this code. The content of this method is
                             .addComponent(languageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(chooseFileButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(submitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)))
+                        .addComponent(submitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         contentPanel.add(homePanel);
 
-        submissionsTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        submissionsTable.setModel(new DefaultTableModel());
         scrollPane.setViewportView(submissionsTable);
 
         submissionsLabel.setFont(new java.awt.Font("Questrial", 0, 24)); // NOI18N
@@ -302,9 +321,9 @@ k * WARNING: Do NOT modify this code. The content of this method is
     private void chooseFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseFileButtonActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         if(fileChooser.showOpenDialog(this)==JFileChooser.APPROVE_OPTION){
-            File submissionFile = fileChooser.getSelectedFile();
-            if(submissionFile != null){
-                chooseFileButton.setText(submissionFile.getName());
+            file = fileChooser.getSelectedFile();
+            if (file != null) {
+                chooseFileButton.setText(file.getName());
             }
         }
 
@@ -319,6 +338,7 @@ k * WARNING: Do NOT modify this code. The content of this method is
             else {
                 this.homePanel.setVisible(false);
                 this.profilePanel.setVisible(true);
+                populateProfileData();
                 homeProfileButton.setText("Back");
             }
         }
@@ -341,9 +361,17 @@ k * WARNING: Do NOT modify this code. The content of this method is
         LoginDialog loginDialog = new LoginDialog(this);
         loginDialog.setVisible(true);
         if(loginDialog.isSucceeded()){
-            username = loginDialog.getUsername();
-            this.homeProfileButton.setText("Hello, " + username);
-            contentPanel.setVisible(true);
+            try {
+                username = loginDialog.getUsername();
+                this.homeProfileButton.setText("Hello, " + username);
+                contentPanel.setVisible(true);
+                populateList();
+                //populateProfileData();
+                this.questionTextArea.setEditable(false);
+            }
+            catch (SQLException ex) {
+                Logger.getLogger(DreddGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -351,6 +379,111 @@ k * WARNING: Do NOT modify this code. The content of this method is
         homeProfileButton.setText("Login");
         doLogin();
     }//GEN-LAST:event_logoutButtonActionPerformed
+
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
+        try {
+            String lang = languageComboBox.getSelectedItem().toString();
+            Path path = Paths.get(file.getAbsolutePath());
+            String qDir = questionsList.getSelectedValue().toString();
+            Language language;
+            switch (lang) {
+                case "Java":
+                    language = new JavaLanguage(path, qDir);
+                    break;
+                case "C++":
+                    language = new CPPLanguage(path, qDir);
+                    break;
+                default:
+                    language = new CLanguage(path, qDir);
+                    break;
+            }
+            Statement st = con.createStatement();
+            String query = "select questionid from questions where questionname like '" + qDir + "'";
+            ResultSet rs = st.executeQuery(query);
+            rs.next();
+            String qid = rs.getString("questionid");
+            String insert = "insert into submissions(questionid, userid, language) values('" + qid + "'," + "'" + userid + "'," + "'" + language.getName() + "')";
+            st.executeUpdate(insert);
+            query = "select last_insert_id()";
+            rs = st.executeQuery(query);
+            rs.next();
+            String sid = rs.getString(1);
+            Judge judge = new Judge(language, qDir, sid, 0);
+            String result = judge.evaluate();
+            JOptionPane.showMessageDialog(rootPane, "Your submission is " + result, "Result", JOptionPane.INFORMATION_MESSAGE);
+            query = "update submissions set judgement = '" +result + "' where submissionid = " + sid;
+            st.executeUpdate(query);
+            query = "update questions set totalsubmissions = totalsubmissions+1 where questionid = '" + qDir + "'";
+            st.executeUpdate(query);
+            if(result.equals(Judgement.CORRECT.toString())){
+                query = "update questions set correctsubmissions = correctsubmissions+1 where questionid = '"+qDir+"'";
+                st.executeUpdate(query);
+                
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(DreddGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_submitButtonActionPerformed
+
+    private void populateList() throws SQLException{
+        DefaultListModel model = new DefaultListModel();
+        Statement st = con.createStatement();
+        String query = "Select questionname from questions";
+        ResultSet rs = st.executeQuery(query);
+        while(rs.next())
+            model.addElement(rs.getString("questionname"));
+        this.questionsList.setModel(model);
+        this.questionsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.questionsList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(questionsList.equals(e.getSource())){
+                    if(e.getClickCount()==2){
+                        String qName = questionsList.getSelectedValue().toString();
+                        displayQuestion(qName);
+                    }
+                }
+            }
+
+        });
+        this.questionsList.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e){
+                if(questionsList.equals(e.getSource())){
+                    if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                        String qName = questionsList.getSelectedValue().toString();
+                        displayQuestion(qName);
+                    }
+                }
+            }
+        });
+    }
+
+    public void displayQuestion(String qName) {
+        try {
+            Statement st = con.createStatement();
+            String query = "select questionpath from questions where questionname like '" + qName + "'";
+            ResultSet rs = st.executeQuery(query);
+            rs.next();
+            String path = rs.getString("questionpath");
+            Path file = Paths.get(path);
+            StringBuilder question = new StringBuilder();
+            try(BufferedReader br = Files.newBufferedReader(file)){
+                String s;
+                while((s = br.readLine())!=null)
+                    question.append(s).append("\n");
+            }
+            catch (IOException ex) {
+                Logger.getLogger(DreddGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            this.questionTextArea.append(question.toString());
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(DreddGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -378,10 +511,10 @@ k * WARNING: Do NOT modify this code. The content of this method is
         //</editor-fold>
 
         con = ConnectionProvider.connect(DB_USERNAME, DB_PASSWORD, DBMS, DB_SERVER, DB_PORT, DB_NAME);
-        Language language = new CLanguage(Paths.get("/home/pawandubey/dredd/test.c"), "one");
-
-        Judge judge = new Judge(language, "one", "1234", 0);
-        System.out.println(judge.evaluate());
+//        Language language = new CLanguage(Paths.get("/home/pawandubey/dredd/test.c"), "one");
+//
+//        Judge judge = new Judge(language, "one", "1234", 0);
+//        System.out.println(judge.evaluate());
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -399,8 +532,8 @@ k * WARNING: Do NOT modify this code. The content of this method is
     private javax.swing.JLabel correctSubmissionsLabel;
     private javax.swing.JPanel homePanel;
     private javax.swing.JToggleButton homeProfileButton;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JComboBox languageComboBox;
     private javax.swing.JButton logoutButton;
     private javax.swing.JPanel profilePanel;
@@ -416,4 +549,41 @@ k * WARNING: Do NOT modify this code. The content of this method is
     private javax.swing.JPanel titlePanel;
     private javax.swing.JLabel totalSubmissionsLabel;
     // End of variables declaration//GEN-END:variables
+
+    private void populateProfileData() {
+        try {
+            Statement st = con.createStatement();
+            String query = "select count(submissionid) from submissions natural join users where userid = '" + userid + "' and judgement = 'CORRECT'";
+            ResultSet rs = st.executeQuery(query);
+            rs.next();
+            String correct = rs.getString(1);
+            correctSubmissionsLabel.setText("Correct "+correct);
+            query = "select submissionid, questionid, language, judgement from submissions natural join users where name = '" + username + "'";
+            rs = st.executeQuery(query);
+            rs.last();
+            int count = rs.getRow();
+            totalSubmissionsLabel.setText("Total " + count);
+            rs.first();
+            rs.previous();
+            Object[] col = {"Submission ID", "Question ID", "Language", "Judgement"};
+            String[][] data = new String[count][4];
+            //columns.addAll(Arrays.asList(col));
+            //String[] row = new String[4];
+            int index = 0;
+            while(rs.next()){
+                for (int i = 1; i < 5; i++) {
+                    data[index][i - 1] = rs.getString(i);
+                }
+                index++;
+            }
+
+            model = new DefaultTableModel(data, col);
+            submissionsTable.setModel(model);
+            submissionsTable.setAutoCreateRowSorter(true);
+
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(DreddGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
