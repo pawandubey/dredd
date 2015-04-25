@@ -38,9 +38,10 @@ public class ConnectionProvider {
      * @param dbServer The database server (e.g. localhost)
      * @param dbPort The port on which the db is running on the server
      * @param dbName The name of a specific database in the dbms
+     * @return
      */
-    public static void connect(String dbUserName, String dbPassword, String dbms, String dbServer, String dbPort, String dbName) {
-        Connection dbConnection;
+    public static Connection connect(String dbUserName, String dbPassword, String dbms, String dbServer, String dbPort, String dbName) {
+        Connection dbConnection = null;
         Properties connectionProperties = new Properties();
         connectionProperties.put("user", dbUserName);
         connectionProperties.put("password", dbPassword);
@@ -54,6 +55,7 @@ public class ConnectionProvider {
         catch (SQLException ex) {
             Logger.getLogger(Dredd.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return dbConnection;
     }
 
 }
