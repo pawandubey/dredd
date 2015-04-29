@@ -168,17 +168,18 @@ public class DreddGUI extends javax.swing.JFrame {
         titlePanelLayout.setVerticalGroup(
             titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titlePanelLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(activeScreenLabel)
-                    .addComponent(titleLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(titlePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(homeProfileButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(logoutButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(titlePanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(activeScreenLabel)
+                            .addComponent(titleLabel)))
+                    .addGroup(titlePanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(homeProfileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(logoutButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
 
         contentPanel.setLayout(new javax.swing.OverlayLayout(contentPanel));
@@ -216,7 +217,7 @@ public class DreddGUI extends javax.swing.JFrame {
             homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(homePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
@@ -238,19 +239,19 @@ public class DreddGUI extends javax.swing.JFrame {
             .addGroup(homePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(questionNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(submissionStatsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3)
                     .addGroup(homePanelLayout.createSequentialGroup()
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(questionNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(submissionStatsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(languageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(chooseFileButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(submitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)))
+                        .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -274,12 +275,12 @@ public class DreddGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(profilePanelLayout.createSequentialGroup()
-                        .addComponent(submissionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(submissionsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(totalSubmissionsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(correctSubmissionsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(202, 202, 202))
                     .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -288,13 +289,13 @@ public class DreddGUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, profilePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(submissionsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(submissionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(profilePanelLayout.createSequentialGroup()
                         .addComponent(totalSubmissionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(correctSubmissionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -311,7 +312,7 @@ public class DreddGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(titlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -338,9 +339,9 @@ public class DreddGUI extends javax.swing.JFrame {
             else {
                 this.homePanel.setVisible(false);
                 this.profilePanel.setVisible(true);
-                populateProfileData();
-                homeProfileButton.setText("Back");
                 this.activeScreenLabel.setText("PROFILE");
+                populateProfileData();
+                homeProfileButton.setText("Back");                
             }
         }
         else {
@@ -384,43 +385,48 @@ public class DreddGUI extends javax.swing.JFrame {
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         try {
-            String lang = languageComboBox.getSelectedItem().toString();
-            Path path = Paths.get(file.getAbsolutePath());
-            String qDir = questionsList.getSelectedValue().toString();
-            Language language;
-            switch (lang) {
-                case "Java":
-                    language = new JavaLanguage(path, qDir);
-                    break;
-                case "C++":
-                    language = new CPPLanguage(path, qDir);
-                    break;
-                default:
-                    language = new CLanguage(path, qDir);
-                    break;
+            if(file == null){
+                JOptionPane.showMessageDialog(rootPane, "No source file selected! Please select a source file and then press submit.", "No File Selected", JOptionPane.ERROR_MESSAGE);
             }
-            Statement st = con.createStatement();
-            String query = "select questionid from questions where questionname like '" + qDir + "'";
-            ResultSet rs = st.executeQuery(query);
-            rs.next();
-            String qid = rs.getString("questionid");
-            String insert = "insert into submissions(questionid, userid, language) values('" + qid + "'," + "'" + userid + "'," + "'" + language.getName() + "')";
-            st.executeUpdate(insert);
-            query = "select last_insert_id()";
-            rs = st.executeQuery(query);
-            rs.next();
-            String sid = rs.getString(1);
-            Judge judge = new Judge(language, qDir, sid, 0);
-            String result = judge.evaluate();
-            JOptionPane.showMessageDialog(rootPane, "Your submission is " + result, "Result", JOptionPane.INFORMATION_MESSAGE);
-            query = "update submissions set judgement = '" + result + "' where submissionid = " + sid;
-            st.executeUpdate(query);
-            query = "update questions set totalsubmissions = totalsubmissions+1 where questionid = '" + qDir + "'";
-            st.executeUpdate(query);
-            if (result.equals(Judgement.CORRECT.toString())) {
-                query = "update questions set correctsubmissions = correctsubmissions+1 where questionid = '" + qDir + "'";
+            else{
+                String lang = languageComboBox.getSelectedItem().toString();
+                Path path = Paths.get(file.getAbsolutePath());
+                String qDir = questionsList.getSelectedValue().toString();
+                Language language;
+                switch (lang) {
+                    case "Java":
+                        language = new JavaLanguage(path, qDir);
+                        break;
+                    case "C++":
+                        language = new CPPLanguage(path, qDir);
+                        break;
+                    default:
+                        language = new CLanguage(path, qDir);
+                        break;
+                }
+                Statement st = con.createStatement();
+                String query = "select questionid from questions where questionname like '" + qDir + "'";
+                ResultSet rs = st.executeQuery(query);
+                rs.next();
+                String qid = rs.getString("questionid");
+                String insert = "insert into submissions(questionid, userid, language) values('" + qid + "'," + "'" + userid + "'," + "'" + language.getName() + "')";
+                st.executeUpdate(insert);
+                query = "select last_insert_id()";
+                rs = st.executeQuery(query);
+                rs.next();
+                String sid = rs.getString(1);
+                Judge judge = new Judge(language, qDir, sid, 0);
+                String result = judge.evaluate();
+                JOptionPane.showMessageDialog(rootPane, "Your submission is " + result, "Result", JOptionPane.INFORMATION_MESSAGE);
+                query = "update submissions set judgement = '" + result + "' where submissionid = " + sid;
                 st.executeUpdate(query);
-                
+                query = "update questions set totalsubmissions = totalsubmissions+1 where questionid = '" + qDir + "'";
+                st.executeUpdate(query);
+                if (result.equals(Judgement.CORRECT.toString())) {
+                    query = "update questions set correctsubmissions = correctsubmissions+1 where questionid = '" + qDir + "'";
+                    st.executeUpdate(query);
+
+                }
             }
         }
         catch (SQLException ex) {
@@ -563,7 +569,7 @@ public class DreddGUI extends javax.swing.JFrame {
             rs.next();
             String correct = rs.getString(1);
             correctSubmissionsLabel.setText("Correct " + correct);
-            query = "select submissionid, questionid, language, judgement from submissions natural join users where name = '" + username + "'";
+            query = "select submissionid, questionid, language, judgement from submissions natural join users where name = '" + username + "' order by submissiontime desc";
             rs = st.executeQuery(query);
             rs.last();
             int count = rs.getRow();
