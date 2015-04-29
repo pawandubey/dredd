@@ -477,9 +477,9 @@ public class DreddGUI extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery(query);
             rs.next();
             String path = rs.getString("questionpath");
-            Path file = Paths.get(path);
+            Path sourceFile = Paths.get(path);
             StringBuilder question = new StringBuilder();
-            try (BufferedReader br = Files.newBufferedReader(file)) {
+            try (BufferedReader br = Files.newBufferedReader(sourceFile)) {
                 String s;
                 while ((s = br.readLine()) != null) {
                     question.append(s).append("\n");
